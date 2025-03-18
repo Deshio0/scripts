@@ -3,7 +3,6 @@ Simple nmap target analyzer by deshio
 '''
 import os
 import ipaddress
-import subprocess
 
 class colours:
     RED = '\33[31m'
@@ -22,25 +21,34 @@ def start():
     print(colours.GREEN + "                    2. " + colours.BLUE + "Exit program" + colours.END)
     print(colours.BOLD + colours.RED + "-/-/-/-/-/-/-/-/-/-/-/-/-/-/-\-\-\-\-\-\-\-\-\-\-\-\-\-\-" + colours.END)
     
-    global choice1
-    choice1 = input("                        Choice: ")
+    choice = input("                        Choice: ")
     
-    if choice1 == '2':
+    if choice == "2":
         os.system("clear")
         os.system("exit")
-        return 2
-    elif choice1 == '1':
-        return 1
+        return choice
+    elif choice == "1":
+        return "1"
     else:
         print("WRONG INPUT! ")
-        return 0
-    
-global target2
+        return False
+
+def mode():
+    os.system("clear")
+    print("Debug: Run Start")
+    print(colours.BOLD + colours.RED + "-/-/-/-/-/-/-/- Target Analyzer by deshio -\-\-\-\-\-\-\-" + colours.END)
+    print(colours.RED + colours.BOLD + "                    Choose what to do: " + colours.END)
+    print(colours.GREEN + "                    1. " + colours.BLUE + "Standard Scan")
+    print(colours.GREEN + "                    2. " + colours.BLUE + "Slow Scan" + colours.END)
+    print(colours.GREEN + "                    3. " + colours.BLUE + "Return back" + colours.END)
+    print(colours.BOLD + colours.RED + "-/-/-/-/-/-/-/-/-/-/-/-/-/-/-\-\-\-\-\-\-\-\-\-\-\-\-\-\-" + colours.END)
+    choice = input("                        Choice: ")
+    return choice
 
 def analyze():
     global target
-    # os.system("clear")
-    print("Debug: Run Analyze")
+    os.system("clear")
+    print("Debug: Input Target")
     print(colours.BOLD + colours.RED + "-/-/-/-/-/-/-/- Target Analyzer by deshio -\-\-\-\-\-\-\-" + colours.END)
     print(colours.GREEN + "             ! " + colours.BLUE + "Type 'back' to return ")
     target = input(colours.GREEN + "             1. " + colours.BLUE + "Target address: ")
@@ -54,27 +62,39 @@ def analyze():
             return False
     
     if target == "back":
-        return 1
+        return "back"
     elif ipcheck() == True:
-        print("Debug: Actual analyze")
+        print("Debug: nmap analyze")
         os.system("nmap -oN " + target + ".txt " + target + " > /dev/null 2>&1")
+        print(colours.BOLD + colours.RED + "Currently open ports: "+ colours.END)
         os.system("cat " + target + ".txt " + "| grep open")
-        input("good?")
+        print(colours.RED +"Full scan details saved in " + "./" + target + ".txt" + colours.END)
+        print(colours.BOLD + colours.RED + "-/-/-/-/-/-/-/-/-/-/-/-/-/-/-\-\-\-\-\-\-\-\-\-\-\-\-\-\-" + colours.END)
+        input("Continue ")
     else:
         print("Wrong input!")
     
     
 # -----------------------------------------------
 
-global checking
 
 while True:
-    checking = start()
-    if checking == 1:
+
+    if start() == "1":
+        
         while True:
-            choice2 = analyze()
-            if choice2 == 1:
+            
+            if mode() == "1":
+                
+                while True:
+                    
+                    if analyze() == "back":
+                        break
+                    else:
+                        continue
+            else:
                 break
-    if checking == 2:
+    elif "2":
         exit()
-    
+    else:
+        continue
