@@ -29,11 +29,11 @@ def choice():
         return 0
     elif (ch == '2'):
         os.system("powerprofilesctl set balanced")
-        os.system("optimus-manager --switch intel")
+        os.system("optimus-manager --switch integrated")
         return 0
     elif (ch == '3'):
         os.system("powerprofilesctl set power-saver")
-        os.system("optimus-manager --switch intel")
+        os.system("optimus-manager --switch integrated")
         return 0
     else:
         print("Wrong choice! ")
@@ -43,6 +43,9 @@ while(True):
     show_menu()
     choice()
     check = choice()
+    if(check == 0):
+        break
+    os.system("clear")
     if(check == 0):
         break
     os.system("clear")
