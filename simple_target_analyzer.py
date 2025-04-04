@@ -1,8 +1,14 @@
 '''
 Simple nmap target analyzer by deshio
 '''
+
 import os
 import ipaddress
+
+global scan_mode
+
+# Colors for terminal output
+# ANSI escape sequences for colored text
 
 class colours:
     RED = '\33[31m'
@@ -11,6 +17,8 @@ class colours:
     UNDERLINE = '\033[4m'
     BLUE   = '\33[34m'
     GREEN  = '\33[32m'
+    
+# First startup function
 
 def start():
     os.system("clear")
@@ -32,8 +40,11 @@ def start():
     else:
         print("WRONG INPUT! ")
         return False
+    
+# Second startup function - Choose mode
 
 def mode():
+    global scan_mode
     os.system("clear")
     print("Debug: Run Start")
     print(colours.BOLD + colours.RED + "-/-/-/-/-/-/-/- Target Analyzer by deshio -\-\-\-\-\-\-\-" + colours.END)
@@ -45,6 +56,8 @@ def mode():
     choice = input("                        Choice: ")
     return choice
 
+# Third startup function - Target Input
+
 def analyze():
     global target
     os.system("clear")
@@ -54,7 +67,7 @@ def analyze():
     target = input(colours.GREEN + "             1. " + colours.BLUE + "Target address: ")
     print(colours.BOLD + colours.RED + "-/-/-/-/-/-/-/-/-/-/-/-/-/-/-\-\-\-\-\-\-\-\-\-\-\-\-\-\-" + colours.END)
     
-    def ipcheck():
+    def ipcheck(): # Checks if input is valid IP address
         try:
             ipaddress.IPv4Network(target, strict=False)
             return True
@@ -63,9 +76,14 @@ def analyze():
     
     if target == "back":
         return "back"
-    elif ipcheck() == True:
+    
+    # Normal Scan
+    elif ipcheck() == True: 
         print("Debug: nmap analyze")
-        os.system("nmap -oN " + target + ".txt " + target + " > /dev/null 2>&1")
+        if scan_mode == "1":
+            os.system("nmap -oN " + target + ".txt " + target + " > /dev/null 2>&1")
+        elif scan_mode == "2":
+            os.system("nmap -sS -oN " + target + ".txt " + target + " > /dev/null 2>&1")
         print(colours.BOLD + colours.RED + "Currently open ports: "+ colours.END)
         os.system("cat " + target + ".txt " + "| grep open")
         print(colours.RED +"Full scan details saved in " + "./" + target + ".txt" + colours.END)
@@ -77,24 +95,30 @@ def analyze():
     
 # -----------------------------------------------
 
+while True: # This code is such a mess and i dont want to fix it
 
-while True:
-
-    if start() == "1":
+    if start() == "1": # First startup function
         
         while True:
             
-            if mode() == "1":
-                
+            # Second startup function - Choose mode
+            choice = mode()
+            if choice == "1" or choice == "2": # Normal and Slow Scan
                 while True:
-                    
-                    if analyze() == "back":
+                    if analyze() == "back": # Return back to Second startup function
                         break
                     else:
                         continue
-            else:
+            elif choice == "3": # Return back to First startup function
                 break
-    elif "2":
+            else:
+                print("Wrong input!")
+                continue
+    elif "2": # Exit the program
+        exit()
+    else:
+        continue
+    
         exit()
     else:
         continue
