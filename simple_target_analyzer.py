@@ -54,6 +54,7 @@ def mode():
     print(colours.GREEN + "                    3. " + colours.BLUE + "Return back" + colours.END)
     print(colours.BOLD + colours.RED + "-/-/-/-/-/-/-/-/-/-/-/-/-/-/-\-\-\-\-\-\-\-\-\-\-\-\-\-\-" + colours.END)
     choice = input("                        Choice: ")
+    scan_mode = choice
     return choice
 
 # Third startup function - Target Input
